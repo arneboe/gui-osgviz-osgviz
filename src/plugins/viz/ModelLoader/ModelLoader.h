@@ -14,12 +14,13 @@ namespace osgviz {
 
 class ModelLoader : public OsgVizPlugin{
 public:
-	ModelLoader(lib_manager::LibManager *theManager);
+	ModelLoader();
 	virtual ~ModelLoader();
 
 	virtual int getLibVersion() const {return 1;};
 
 	virtual const std::string getLibName() const { return "ModelLoader"; };
+
 
 	virtual void init(int argc, char** argv);
 

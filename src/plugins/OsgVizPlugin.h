@@ -8,34 +8,47 @@
 #ifndef SRC_PLUGINS_OsgVizPlugin_H_
 #define SRC_PLUGINS_OsgVizPlugin_H_
 
-#include <lib_manager/LibManager.hpp>
+//#include <plugin_manager/LibManager.hpp>
+
+#include <class_loader/class_loader.h>
+
 #include <stdio.h>
 
 #include "Object.h"
 
-
+/*
 #define OSGVIZ_PLUGIN(NAME) \
 	CREATE_LIB(NAME); \
 	DESTROY_LIB(NAME);
+*/
+
+#define OSGVIZ_PLUGIN(NAME) CLASS_LOADER_REGISTER_CLASS(NAME, osgviz::OsgVizPlugin);
+//    std::string NAME::getClassName() const { return #NAME; }
+
+
 
 
 namespace osgviz {
 
 class OsgViz;
 
-class OsgVizPlugin: public lib_manager::LibInterface  {
+//class OsgVizPlugin: public lib_manager::LibInterface  {
+class OsgVizPlugin{
 public:
 
-	OsgVizPlugin(lib_manager::LibManager *theManager):LibInterface(theManager){};
+	//OsgVizPlugin(lib_manager::LibManager *theManager):LibInterface(theManager){};#
+    OsgVizPlugin(){};
 
 	virtual ~OsgVizPlugin(){};
 
-	/**
-	 * Return a lib name used to reference the lib via the libmanager
-	 */
-	virtual const std::string getLibName() const = 0;
+//	/**
+//	 * Return a lib name used to reference the lib via the libmanager
+//	 */
+//	virtual const std::string getLibName() const = 0;
+//
+//    virtual int getLibVersion() const = 0;
 
-    virtual int getLibVersion() const = 0;
+//    virtual std::string getClassName() const = 0;
 
     /**
      * init is calles after loading the plugin using

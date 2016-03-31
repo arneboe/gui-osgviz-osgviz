@@ -2,7 +2,8 @@
 #define _OSGVIZ_HPP_
 
 #include <iostream>
-#include <lib_manager/LibManager.hpp>
+//#include <lib_manager/LibManager.hpp>
+#include <plugin_manager/PluginLoader.hpp>
 #include <osg/Group>
 #include <osgViewer/Viewer>
 #include <osgDB/WriteFile>
@@ -48,14 +49,6 @@ namespace osgviz
 		static osg::ref_ptr<OsgViz> getInstance(int argc = 0,char** argv = NULL);
 
 		/**
-		 * In case the context where OsgViz is used is already using libmanager, it can be passed to
-		 * the constructor in order not to use an own instance
-		 * @param manager a LibManager instance
-		 * @return the osgviz instance
-		 */
-		static osg::ref_ptr<OsgViz> getInstance(lib_manager::LibManager * manager);
-
-		/**
 		 * This method is meant for plugins to obtain the instance which is already loaded
 		 * @return the OsgViz main
 		 */
@@ -68,11 +61,6 @@ namespace osgviz
 		 * @param argv
 		 */
 		OsgViz(int argc, char** argv);
-		/**
-		 * private constructor used by getInstance()
-		 * @param manager
-		 */
-		OsgViz(lib_manager::LibManager * manager);
 
 		/**
 		 * init function with shared code for both constructors
@@ -150,8 +138,8 @@ namespace osgviz
 		 * @param classname the plugin name, which in case of osgviz is also the libraries filename
 		 * @return a plugin of the type of the class given by the templae or NULL, if the library does not exist.
 		 */
-		template <class PLUGINTYPE> PLUGINTYPE* getPlugin(std::string classname){
-		    PLUGINTYPE* viz = (PLUGINTYPE*)getVizPlugin(classname,classname);
+		template <class PLUGINTYPE> boost::shared_ptr<PLUGINTYPE> getPlugin(std::string classname){
+		    boost::shared_ptr<PLUGINTYPE> viz = (PLUGINTYPE*)getVizPlugin(classname,classname);
 			return viz;
 		}
 
@@ -220,7 +208,7 @@ namespace osgviz
 
 		private:
 
-		OsgVizPlugin* getVizPlugin(std::string path, std::string name);
+		boost::shared_ptr<OsgVizPlugin> getVizPlugin(std::string name);
 
 		bool createdOwnManager;
 
@@ -245,7 +233,7 @@ namespace osgviz
 
 		osg::ref_ptr<WindowManager> windowManager;
 
-		lib_manager::LibManager * libManager;
+		plugin_manager::PluginLoader * pluginLoader;
 
 
 		std::map<int, Updatable*> updateCallbacks;
